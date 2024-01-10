@@ -11,27 +11,49 @@ import (
 	"sync"
 )
 
-var primes []int
-var mutex sync.Mutex
-
 func main() {
 	wg := &sync.WaitGroup{}
+	ch := make(chan int)
 	for i := 2; i <= 100; i++ {
 		wg.Add(1)
-		go process(i, wg)
+		go process(i, wg, ch)
 	}
+
+	printWg := sync.WaitGroup{}
+	printWg.Add(1)
+	go func() {
+		for primeNo := range ch {
+			fmt.Println(primeNo)
+		}
+		fmt.Println("All prime numbers received")
+		printWg.Done()
+	}()
+
 	wg.Wait()
-	fmt.Println(primes)
+	close(ch)
+	printWg.Wait()
+
+	/*
+		done := make(chan struct{})
+		go func() {
+			for primeNo := range ch {
+				fmt.Println(primeNo)
+			}
+			fmt.Println("All prime numbers received")
+			close(done)
+		}()
+
+		wg.Wait()
+		close(ch)
+		<-done
+	*/
+
 }
 
-func process(no int, wg *sync.WaitGroup) {
+func process(no int, wg *sync.WaitGroup, ch chan int) {
 	defer wg.Done()
 	if isPrime(no) {
-		mutex.Lock()
-		{
-			primes = append(primes, no)
-		}
-		mutex.Unlock()
+		ch <- no
 	}
 }
 
