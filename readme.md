@@ -47,3 +47,19 @@
     - > go run -race [program.go]
     - > go build -race [program.go]
     - Note: DO NOT create a production build with race detector
+### Communication (channel)
+- Declaration
+    - > var ch chan int
+- Initialization
+    - > ch = make(chan int)
+- Declaration & Initialization (type inference)
+    - > ch := make(chan int)
+- Operation (using channel operator ( <- ))
+    - Send Operation
+        - > ch <- [data]
+    - Receive Operation
+        - > data := <- ch
+- Behavior
+    - A RECIEVE operation is ALWAYS a blocking operation (blocked until the data is sent through the channel)
+    - A SEND operation is blocked until a RECIEVE operation is initiated
+![image](./images/channel-behaviors.png)
