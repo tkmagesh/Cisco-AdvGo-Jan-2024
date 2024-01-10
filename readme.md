@@ -29,4 +29,17 @@
 ## Recap
 - Interfaces
 
+## Managed Concurrency
+- Concurrency
+    - Ability to have more than one execution path
+    - Concurrency is NOT parallelism
+- Builtin scheduler
+- Concurrent operations are represented as goroutines (cheap = 2KB)
+- Language support for concurrency
+    - go keyword
+    - channel data type
+    - channel operator ( <- )
+    - range, select-case constructs
+![image](./images/managed-concurrency.png)
+
 
