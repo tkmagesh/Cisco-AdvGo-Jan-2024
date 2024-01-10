@@ -42,4 +42,8 @@
     - range, select-case constructs
 ![image](./images/managed-concurrency.png)
 
-
+### Concurrent Safe State Management
+- To detect data race run/build with race detector
+    - > go run -race [program.go]
+    - > go build -race [program.go]
+    - Note: DO NOT create a production build with race detector
