@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -20,6 +21,18 @@ func main() {
 	}()
 
 	// modify the program so that the data is printed in the order in which they were produced
-	fmt.Println(<-ch1)
-	fmt.Println(<-ch2)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		fmt.Println(<-ch1)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		fmt.Println(<-ch2)
+	}()
+
+	wg.Wait()
 }
