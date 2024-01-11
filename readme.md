@@ -63,3 +63,11 @@
     - A RECIEVE operation is ALWAYS a blocking operation (blocked until the data is sent through the channel)
     - A SEND operation is blocked until a RECIEVE operation is initiated
 ![image](./images/channel-behaviors.png)
+
+## Context
+- cancel propagation
+- context.Background() is the base of the context chain
+- context.WithCancel() 
+- context.WithTimeout() (timeout in relative time)
+- context.WithDeadline() (timeout in absolute time)
+- context.WithValue()

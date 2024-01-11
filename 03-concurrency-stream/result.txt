@@ -1,0 +1,2 @@
+Even Total : 270, Even Count : 75
+Odd Total : 510, Odd Count : 90
