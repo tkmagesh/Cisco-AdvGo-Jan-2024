@@ -71,3 +71,46 @@
 - context.WithTimeout() (timeout in relative time)
 - context.WithDeadline() (timeout in absolute time)
 - context.WithValue()
+
+## GRPC
+- Alternative to HTTP based restful services
+- Optimal for micro-services communication
+- Communication Patterns
+    - Request & Response
+    - Server Streaming (one request & stream of responses)
+    - Client Streaming (stream of requests & one response)
+    - Bidirectional Streaming (stream of requests & stream of responses)
+- HTTP2
+- Uses Protocol Buffers for serializing payloads
+    - Share the schema among the consumers and producers in advance
+- Multi-language supports
+    - Go
+    - Java
+    - .NET
+    - Node.js
+    - Python
+### Steps: 
+    - Create service / operations / data contracts using protocol buffers
+    - Share the contract between the client & server
+    - Generate proxy & stub using the contracts
+    - Server
+        - implement the service (with the business logic) based on the contract
+        - host the service
+    - Client
+        - Use the proxy to communicate to the service
+
+
+### Tools Installation 
+    1. Protocol Buffers Compiler (protoc tool)
+        Windows:
+            Download the file, extract and keep in a folder (PATH) accessble through the command line
+            https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protoc-24.4-win64.zip
+        Mac:
+            brew install protobuf
+
+        Verification:
+            protoc --version
+
+    2. Go plugins (installed in the GOPATH/bin folder)
+        go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
