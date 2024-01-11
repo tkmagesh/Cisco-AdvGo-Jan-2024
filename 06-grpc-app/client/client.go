@@ -9,7 +9,9 @@ import (
 	"grpc-app/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -24,7 +26,8 @@ func main() {
 	ctx := context.Background()
 
 	// doRequestResponse(ctx, appServiceClient)
-	doServerStreaming(ctx, appServiceClient)
+	// doServerStreaming(ctx, appServiceClient)
+	doServerStreamingWithCancellation(ctx, appServiceClient)
 }
 
 func doServerStreaming(ctx context.Context, appServiceClient proto.AppServiceClient) {
@@ -48,6 +51,42 @@ func doServerStreaming(ctx context.Context, appServiceClient proto.AppServiceCli
 	}
 }
 
+func doServerStreamingWithCancellation(ctx context.Context, appServiceClient proto.AppServiceClient) {
+	primeReq := &proto.PrimeRequest{
+		Start: 2,
+		End:   100,
+	}
+
+	// creating context with cancellation
+	cancelCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	clientStream, err := appServiceClient.GeneratePrimes(cancelCtx, primeReq)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println("Hit ENTER to stop...!")
+	go func() {
+		fmt.Scanln()
+		cancel()
+	}()
+
+LOOP:
+	for {
+		res, err := clientStream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			if code := status.Code(err); code == codes.Canceled {
+				fmt.Println("Cancellation initiated")
+				break LOOP
+			}
+		}
+		fmt.Printf("Prime No : %d\n", res.GetPrimeNo())
+	}
+}
 func doRequestResponse(ctx context.Context, appServiceClient proto.AppServiceClient) {
 	req := &proto.AddRequest{
 		X: 100,
