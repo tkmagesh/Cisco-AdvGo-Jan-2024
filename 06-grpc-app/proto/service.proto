@@ -1,0 +1,26 @@
+syntax="proto3";
+
+package proto;
+
+// The go package declaration for the generated go code
+option go_package="/proto";
+
+// data contracts
+// request & response pattern
+message AddRequest{
+    int64 x=1;
+    int64 y=2;
+}
+
+message AddResponse{
+    int64 result=1;
+}
+
+// service contract
+service AppService{
+
+    // operation contracts
+    // Request & Response pattern
+    rpc Add (AddRequest) returns (AddResponse);
+
+}
