@@ -21,6 +21,7 @@ func (as *AppServiceImpl) Add(ctx context.Context, req *proto.AddRequest) (*prot
 	x := req.GetX()
 	y := req.GetY()
 	fmt.Printf("Processing Add Request with x = %d and y = %d\n", x, y)
+	time.Sleep(3 * time.Second)
 	result := x + y
 	fmt.Printf("Responding with result : %d\n", result)
 	res := &proto.AddResponse{
