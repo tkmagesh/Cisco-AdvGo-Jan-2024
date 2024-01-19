@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -31,8 +32,8 @@ type MyServer struct {
 func (myServer *MyServer) Register(pattern string, handler http.HandlerFunc) {
 	// myServer.routes[pattern] = handler
 	// to ensure that the handler func is executed after executing the middlewares
-	for _, middleware := range myServer.middlewares {
-		handler = middleware(handler)
+	for i := len(myServer.middlewares) - 1; i >= 0; i-- {
+		handler = myServer.middlewares[i](handler)
 	}
 	myServer.routes[pattern] = handler
 }
@@ -82,21 +83,31 @@ func productsHanlder(w http.ResponseWriter, r *http.Request) {
 }
 
 func customersHandler(w http.ResponseWriter, r *http.Request) {
-	// fmt.Printf("%s - %s\n", r.Method, r.URL.Path) // refactored as a middleware
 	fmt.Fprintln(w, "All customer requests will be processed")
 }
 
 // middlewares
 func logMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("%s - %s - %s\n", r.Context().Value("trace-id").(string), r.Method, r.URL.Path)
 		fmt.Printf("%s - %s\n", r.Method, r.URL.Path)
 		handler(w, r)
+	}
+}
+
+func traceMiddleware(handler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("traceMiddleware")
+		reqId := "asjflk;ads" //auto generate
+		valCtx := context.WithValue(r.Context(), "trace-id", reqId)
+		handler(w, r.WithContext(valCtx))
 	}
 }
 
 func main() {
 	server := NewMyServer()
 	// using middlewares
+	server.UseMiddleware(traceMiddleware)
 	server.UseMiddleware(logMiddleware)
 	server.Register("/", indexHandler)
 	server.Register("/products", productsHanlder)
