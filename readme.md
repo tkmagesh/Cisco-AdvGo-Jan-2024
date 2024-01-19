@@ -119,6 +119,9 @@
 - Standard Library
 - Code generation tools
     - Using sqlc (https://docs.sqlc.dev/en/latest/overview/install.html)
-
 - 3rd party libraries that are wrappers over the standard library apis
+    - Using sqlx (https://github.com/jmoiron/sqlx)
 - ORM
+
+## Code Generation
+> go generate ./...
