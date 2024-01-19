@@ -47,5 +47,18 @@ func Test_IsPrime(t *testing.T) {
 			}
 		})
 	}
-	t.Log(results)
+
+	t.Cleanup(func() {
+		if results["prime"] != 4 {
+			t.Error("results were not updated")
+		}
+	})
+
+}
+
+// Benchmarking
+func Benchmark_Is_Prime(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		IsPrime(97)
+	}
 }

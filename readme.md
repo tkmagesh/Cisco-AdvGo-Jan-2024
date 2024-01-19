@@ -129,3 +129,10 @@
 ## Testing
 - gotest tool (https://github.com/rakyll/gotest)
 - To generate mock objects (https://vektra.github.io/mockery/latest/)
+
+## Benchmarking
+> go test -run=^$ -bench ^Benchmark_Is_Prime$ testing-app/utils -cpu 1,2,4,8 
+
+## Profiling
+> go test -run=^$ -bench ^Benchmark_Is_Prime$ testing-app/utils -cpu 1,2,4,8 -cpuprofile cpu.prof -memprofile mem.prof
+> go tool pprof cpu.prof
