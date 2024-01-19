@@ -125,3 +125,7 @@
 
 ## Code Generation
 > go generate ./...
+
+## Testing
+- gotest tool (https://github.com/rakyll/gotest)
+- To generate mock objects (https://vektra.github.io/mockery/latest/)
