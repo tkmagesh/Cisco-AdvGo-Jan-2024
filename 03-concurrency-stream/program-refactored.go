@@ -46,8 +46,8 @@ func ProcessData(dataCh chan int) <-chan struct{} {
 		processWg.Add(1)
 		go Merger("result.txt", evenSumCh, oddSumCh, processWg)
 		processWg.Wait()
-		// close(doneCh)
-		doneCh <- struct{}{}
+		// close(doneCh) // to unblock the channel receive operation in other part of the application
+		doneCh <- struct{}{} // to unblock the channel receive operation in other part of the application
 	}()
 	return doneCh
 }
