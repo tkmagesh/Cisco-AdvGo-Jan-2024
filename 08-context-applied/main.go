@@ -1,3 +1,4 @@
+// go:generate echo "Hi there"
 package main
 
 import (
